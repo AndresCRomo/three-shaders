@@ -4,10 +4,11 @@ import { OrbitControls, shaderMaterial } from "@react-three/drei";
 import { extend } from "@react-three/fiber";
 import vertexShader from "../shaders/vertex.glsl";
 import fragmentShader from "../shaders/fragment.glsl";
+import * as THREE from "three";
 
 // Define the custom shader material
 const CustomMaterial = shaderMaterial(
-    { uTime: 0 }, // Uniform for time
+    { uTime: 0, uColor: new THREE.Color('#84CBEA') }, // Uniform for time
     vertexShader,
     fragmentShader
 );
@@ -22,13 +23,14 @@ const AnimatedPlane = () => {
     // Update the uTime uniform in each frame
     useFrame(({ clock }) => {
         if (ref.current) {
-        ref.current.uTime = clock.getElapsedTime()/5;
+        ref.current.uTime = clock.getElapsedTime()/100;
+        ref.current.uColor.setHSL((clock.getElapsedTime() / 100) % 1, 0.5, 0.5);
         }
     });
 
     return (
         <mesh>
-        <sphereGeometry args={[1]} />
+        <icosahedronGeometry args={[1,200]} />
         {/* Use the custom shader material */}
         <customMaterial ref={ref} />
         </mesh>

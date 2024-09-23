@@ -23,7 +23,7 @@ const AnimatedPlane = () => {
     // Update the uTime uniform in each frame
     useFrame(({ clock }) => {
         if (ref.current) {
-        ref.current.uTime = clock.getElapsedTime()/100;
+        ref.current.uTime = clock.getElapsedTime()/10;
         ref.current.uColor.setHSL((clock.getElapsedTime() / 100) % 1, 0.5, 0.5);
         }
     });

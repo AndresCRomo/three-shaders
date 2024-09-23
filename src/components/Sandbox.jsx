@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useEffect,useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, shaderMaterial } from "@react-three/drei";
 import { extend } from "@react-three/fiber";
@@ -24,7 +24,7 @@ const AnimatedPlane = () => {
     useFrame(({ clock }) => {
         if (ref.current) {
         ref.current.uTime = clock.getElapsedTime()/10;
-        ref.current.uColor.setHSL((clock.getElapsedTime() / 100) % 1, 0.5, 0.5);
+        //ref.current.uColor.setHSL((clock.getElapsedTime() / 100) % 1, 0.5, 0.5);
         }
     });
 
@@ -32,19 +32,27 @@ const AnimatedPlane = () => {
         <mesh>
         <icosahedronGeometry args={[1,200]} />
         {/* Use the custom shader material */}
+        
         <customMaterial ref={ref} />
         </mesh>
     );
 };
 
 const Sandbox = () => {
+    const [mouse, setMouse] = useState({ x: 0, y: 0 });
+    const [distance, setDistance] = useState(0);
+    
+
     return (
         <Canvas style={{ background: "#666666" }}>
         <Suspense fallback={null}>
-            <ambientLight />
+            {/* <ambientLight /> */}
+            <pointLight position={[2, 2, 10]} />
+            {/* Add OrbitControls to the scene */}
             <OrbitControls enableZoom={true} enableRotate={true} />
             {/* Render the AnimatedPlane inside Canvas */}
             <AnimatedPlane />
+            
         </Suspense>
         </Canvas>
     );

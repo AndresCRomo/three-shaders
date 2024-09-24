@@ -20,5 +20,5 @@ varying vec2 vUv;
 
 void main() {
     // Color simple usando los UVs, puedes personalizarlo
-    gl_FragColor = vec4(vUv / vDisplacement, 3.0,2.6);
+    gl_FragColor = vec4(0,0.5,0.8,vDisplacement);
 }

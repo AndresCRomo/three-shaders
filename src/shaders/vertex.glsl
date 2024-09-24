@@ -132,6 +132,6 @@ void main() {
     float displacement = vDisplacement /3.0;
     vec3 newPosition =  position + normal * vDisplacement;
     vec4 modelViewPosition = modelViewMatrix * vec4(newPosition, 1.0);
-    vec4 projectedPosition = projectionMatrix * modelViewPosition;
+    vec4 projectedPosition = projectionMatrix * modelViewPosition ;
     gl_Position = projectedPosition;
 }

@@ -1,6 +1,6 @@
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, shaderMaterial, useKeyboardControls, } from "@react-three/drei";
+import { OrbitControls, shaderMaterial, useKeyboardControls, Environment } from "@react-three/drei";
 import { extend } from "@react-three/fiber";
 import vertexShader from "../shaders/vertex.glsl";
 import fragmentShader from "../shaders/fragment.glsl";
@@ -50,11 +50,12 @@ extend({ CustomMaterial });
 
     return (
         <>
-        <RigidBody ref={ballRef} mass={200} position={[0, 45,positionZ]} type="dinamic">
-            <BallCollider  args={[1.87]}  />
+        <RigidBody ref={ballRef} mass={200} colliders="ball" position={[0, 45,positionZ]} type="dinamic">
+            
             <mesh >
-            <icosahedronGeometry args={[1, 200]} />
-            <customMaterial  /> {/* Usar el material personalizado  para aplicar el movimiento del shader agrega el ref*/}
+            <icosahedronGeometry args={[2, 200]} />
+            <meshStandardMaterial color={"#6c6c6"} roughness={0.1} metalness={1} envMapIntensity={1} />
+            {/* <customMaterial  /> */} {/* Usar el material personalizado  para aplicar el movimiento del shader agrega el ref*/}
             </mesh>
         </RigidBody>
         {/* <RigidBody ref={ballRef2} type="KinematicPositionBased">
@@ -74,6 +75,19 @@ extend({ CustomMaterial });
         </>
     );
     };
+
+    const Pin = () =>{
+        const pinRef = useRef();
+        return(
+            <RigidBody ref={pinRef} type="fixed" position={[0, 0, 0]} rotation={[0,0,-Math.PI/1.3]}>
+                <mesh>
+                <boxGeometry args={[8, 100,2]} />
+                <meshBasicMaterial color="#C92F2F" />
+                </mesh>
+            </RigidBody>
+        )
+    }
+
 
     const Arms= () =>{
         const derechaRef = useRef();
@@ -128,7 +142,7 @@ extend({ CustomMaterial });
         
         return( 
             <>
-            <RigidBody ref={derechaRef} position={[53, -10, -10]}   type="kinematicPosition">
+            <RigidBody ref={derechaRef} position={[53, -10, -9]}   type="kinematicPosition">
                     <mesh >
                     <boxGeometry args={[7, 15, 2.35]} />
                     </mesh>
@@ -160,8 +174,9 @@ extend({ CustomMaterial });
             far: 1000,
             position: [100, 10, 0],
         }}
+        frameloop="demand"
         >
-            
+            <ambientLight/>
         <Suspense fallback={null}>
             <Physics gravity={[0, -9.81, 0]} debug >
                 <pointLight position={[2, 2, 10]} />
@@ -210,6 +225,7 @@ extend({ CustomMaterial });
                 
                 <Arms/>
             </Physics>
+            <Environment preset="night" />
         </Suspense>
         </Canvas>
     
